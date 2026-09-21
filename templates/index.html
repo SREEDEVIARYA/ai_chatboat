@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Text to Voice Chatbot</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>🤖 AI Voice Chatbot</h1>
+
+        <p>
+            Type your question and the AI will answer using voice.
+        </p>
+
+    </div>
+
+
+    <div id="chatBox" class="chat-box">
+
+        <div class="bot-message message">
+
+            <div class="message-label">
+                🤖 AI Assistant
+            </div>
+
+            <div>
+                Hello! Ask me anything.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="input-area">
+
+        <textarea
+            id="messageInput"
+            placeholder="Type your message here..."
+            rows="3"></textarea>
+
+        <button id="sendButton"
+                onclick="sendMessage()">
+
+            🎤 Send & Speak
+
+        </button>
+
+    </div>
+
+
+    <div id="loading"
+         class="loading"
+         style="display:none;">
+
+        ⏳ Generating response and voice...
+
+    </div>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>
