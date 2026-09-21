@@ -8,7 +8,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>AI Text to Voice Chatbot</title>
+    <title>AI Voice Chatbot</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
@@ -19,16 +19,24 @@
 
 <div class="container">
 
+    <!-- Header -->
+
     <div class="header">
 
-        <h1>🤖 AI Voice Chatbot</h1>
+        <div class="robot-icon">
+            🤖
+        </div>
+
+        <h1>AI Voice Chatbot</h1>
 
         <p>
-            Type your question and the AI will answer using voice.
+            Speak to the AI and get a voice response
         </p>
 
     </div>
 
+
+    <!-- Chat Area -->
 
     <div id="chatBox" class="chat-box">
 
@@ -38,44 +46,65 @@
                 🤖 AI Assistant
             </div>
 
-            <div>
-                Hello! Ask me anything.
-            </div>
+            <p>
+                Hello! Click the microphone and ask me something.
+            </p>
 
         </div>
 
     </div>
 
 
-    <div class="input-area">
+    <!-- Voice Control -->
 
-        <textarea
-            id="messageInput"
-            placeholder="Type your message here..."
-            rows="3"></textarea>
+    <div class="voice-section">
 
-        <button id="sendButton"
-                onclick="sendMessage()">
+        <button
+            id="micButton"
+            class="mic-button"
+            onclick="startListening()">
 
-            🎤 Send & Speak
+            🎤
 
         </button>
 
+        <p id="voiceStatus">
+            Click the microphone to speak
+        </p>
+
     </div>
 
+
+    <!-- Recognized Text -->
+
+    <div class="recognized-section">
+
+        <label>
+            Your voice:
+        </label>
+
+        <div id="recognizedText">
+            Your speech will appear here...
+        </div>
+
+    </div>
+
+
+    <!-- Loading -->
 
     <div id="loading"
          class="loading"
          style="display:none;">
 
-        ⏳ Generating response and voice...
+        🤔 AI is thinking...
 
     </div>
 
 </div>
 
 
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static',
+filename='js/script.js') }}"></script>
 
 </body>
 

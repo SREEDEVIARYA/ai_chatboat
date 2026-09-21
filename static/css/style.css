@@ -9,7 +9,7 @@ body {
 
     font-family: Arial, sans-serif;
 
-    background: #f2f4f8;
+    background: #eef2ff;
 
     min-height: 100vh;
 
@@ -26,13 +26,14 @@ body {
 
     width: 90%;
 
-    max-width: 900px;
+    max-width: 850px;
 
     background: white;
 
-    border-radius: 15px;
+    border-radius: 20px;
 
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.15);
 
     overflow: hidden;
 
@@ -41,20 +42,27 @@ body {
 
 .header {
 
-    padding: 25px;
+    text-align: center;
+
+    padding: 30px;
 
     background: #4f46e5;
 
     color: white;
 
-    text-align: center;
+}
+
+
+.robot-icon {
+
+    font-size: 50px;
 
 }
 
 
 .header h1 {
 
-    margin: 0 0 10px 0;
+    margin: 10px 0;
 
 }
 
@@ -68,13 +76,13 @@ body {
 
 .chat-box {
 
-    height: 450px;
-
-    overflow-y: auto;
+    height: 400px;
 
     padding: 25px;
 
-    background: #fafafa;
+    overflow-y: auto;
+
+    background: #f9fafb;
 
 }
 
@@ -85,9 +93,9 @@ body {
 
     margin-bottom: 15px;
 
-    border-radius: 12px;
+    border-radius: 15px;
 
-    max-width: 80%;
+    max-width: 75%;
 
     line-height: 1.5;
 
@@ -99,8 +107,6 @@ body {
     margin-left: auto;
 
     background: #dbeafe;
-
-    text-align: right;
 
 }
 
@@ -118,90 +124,128 @@ body {
 
     font-weight: bold;
 
-    margin-bottom: 7px;
+    margin-bottom: 8px;
 
 }
 
 
-.input-area {
+.voice-section {
 
-    padding: 20px;
+    text-align: center;
 
-    display: flex;
-
-    gap: 10px;
-
-    border-top: 1px solid #ddd;
+    padding: 25px;
 
 }
 
 
-textarea {
+.mic-button {
 
-    flex: 1;
+    width: 80px;
 
-    resize: none;
+    height: 80px;
 
-    padding: 15px;
-
-    border: 1px solid #ccc;
-
-    border-radius: 10px;
-
-    font-size: 16px;
-
-}
-
-
-button {
-
-    padding: 15px 20px;
+    border-radius: 50%;
 
     border: none;
-
-    border-radius: 10px;
 
     background: #4f46e5;
 
     color: white;
 
+    font-size: 35px;
+
     cursor: pointer;
 
-    font-size: 15px;
+}
+
+
+.mic-button:hover {
+
+    transform: scale(1.05);
 
 }
 
 
-button:hover {
+.mic-button.listening {
 
-    opacity: 0.9;
+    background: #dc2626;
 
-}
-
-
-button:disabled {
-
-    background: #999;
-
-    cursor: not-allowed;
+    animation: pulse 1s infinite;
 
 }
 
 
-.loading {
+@keyframes pulse {
 
-    padding: 15px;
+    0% {
+        transform: scale(1);
+    }
 
-    text-align: center;
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+}
+
+
+#voiceStatus {
+
+    color: #555;
+
+    margin-top: 12px;
+
+}
+
+
+.recognized-section {
+
+    padding: 0 25px 20px;
+
+}
+
+
+.recognized-section label {
+
+    font-weight: bold;
+
+}
+
+
+#recognizedText {
+
+    margin-top: 8px;
+
+    padding: 12px;
+
+    background: #f3f4f6;
+
+    border-radius: 10px;
 
     color: #555;
 
 }
 
 
+.loading {
+
+    text-align: center;
+
+    padding: 15px;
+
+    color: #4f46e5;
+
+}
+
+
 audio {
 
-    margin-top: 10px;
+    display: block;
+
+    margin-top: 12px;
 
     width: 100%;
 

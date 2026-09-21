@@ -1,31 +1,203 @@
-async function sendMessage() {
+let recognition;
 
-    const input = document.getElementById("messageInput");
-
-    const sendButton = document.getElementById("sendButton");
-
-    const loading = document.getElementById("loading");
-
-    const chatBox = document.getElementById("chatBox");
+let isListening = false;
 
 
-    const message = input.value.trim();
+// Check browser support
+
+if (
+    "webkitSpeechRecognition" in window ||
+    "SpeechRecognition" in window
+) {
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
 
 
-    if (!message) {
+    recognition = new SpeechRecognition();
 
-        alert("Please enter a message.");
+
+    // Language
+
+    recognition.lang = "en-US";
+
+
+    // Return final result
+
+    recognition.continuous = false;
+
+    recognition.interimResults = false;
+
+
+    // When microphone starts
+
+    recognition.onstart = function () {
+
+        isListening = true;
+
+        const micButton =
+            document.getElementById("micButton");
+
+        const voiceStatus =
+            document.getElementById("voiceStatus");
+
+
+        micButton.classList.add("listening");
+
+        micButton.innerHTML = "🔴";
+
+        voiceStatus.innerText =
+            "Listening... Speak now";
+
+    };
+
+
+    // When speech is recognized
+
+    recognition.onresult = function (event) {
+
+        const transcript =
+            event.results[0][0].transcript;
+
+
+        document.getElementById(
+            "recognizedText"
+        ).innerText = transcript;
+
+
+        console.log("User said:", transcript);
+
+
+        // Send recognized text to backend
+
+        sendMessage(transcript);
+
+    };
+
+
+    // When recognition ends
+
+    recognition.onend = function () {
+
+        isListening = false;
+
+        const micButton =
+            document.getElementById("micButton");
+
+        const voiceStatus =
+            document.getElementById("voiceStatus");
+
+
+        micButton.classList.remove("listening");
+
+        micButton.innerHTML = "🎤";
+
+        voiceStatus.innerText =
+            "Click the microphone to speak";
+
+    };
+
+
+    // Error handling
+
+    recognition.onerror = function (event) {
+
+        console.error(
+            "Speech recognition error:",
+            event.error
+        );
+
+
+        const voiceStatus =
+            document.getElementById("voiceStatus");
+
+
+        if (event.error === "not-allowed") {
+
+            voiceStatus.innerText =
+                "Microphone permission denied";
+
+        }
+
+        else if (event.error === "no-speech") {
+
+            voiceStatus.innerText =
+                "No speech detected. Try again.";
+
+        }
+
+        else {
+
+            voiceStatus.innerText =
+                "Speech recognition error";
+
+        }
+
+    };
+
+}
+
+
+// Start microphone
+
+function startListening() {
+
+    if (!recognition) {
+
+        alert(
+            "Speech recognition is not supported in this browser. Please use Google Chrome."
+        );
 
         return;
 
     }
 
 
-    // Display user message
+    if (isListening) {
 
-    const userMessage = document.createElement("div");
+        recognition.stop();
 
-    userMessage.className = "user-message message";
+        return;
+
+    }
+
+
+    recognition.start();
+
+}
+
+
+// Send recognized text to Flask
+
+async function sendMessage(message) {
+
+    if (!message || !message.trim()) {
+
+        return;
+
+    }
+
+
+    const chatBox =
+        document.getElementById("chatBox");
+
+    const loading =
+        document.getElementById("loading");
+
+    const micButton =
+        document.getElementById("micButton");
+
+
+    // Display user's message
+
+    const userMessage =
+        document.createElement("div");
+
+
+    userMessage.className =
+        "user-message message";
+
 
     userMessage.innerHTML = `
 
@@ -43,36 +215,35 @@ async function sendMessage() {
     chatBox.appendChild(userMessage);
 
 
-    // Clear input
-
-    input.value = "";
-
-
     // Show loading
 
     loading.style.display = "block";
 
-    sendButton.disabled = true;
+    micButton.disabled = true;
 
 
     try {
 
-        const response = await fetch("/chat", {
+        const response = await fetch(
+            "/chat",
+            {
 
-            method: "POST",
+                method: "POST",
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-            body: JSON.stringify({
-                message: message
-            })
+                body: JSON.stringify({
+                    message: message
+                })
 
-        });
+            }
+        );
 
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
 
         if (!data.success) {
@@ -84,11 +255,14 @@ async function sendMessage() {
         }
 
 
-        // Create bot message
+        // Display AI response
 
-        const botMessage = document.createElement("div");
+        const botMessage =
+            document.createElement("div");
 
-        botMessage.className = "bot-message message";
+
+        botMessage.className =
+            "bot-message message";
 
 
         botMessage.innerHTML = `
@@ -107,8 +281,6 @@ async function sendMessage() {
                     src="${data.audio}"
                     type="audio/mpeg">
 
-                Your browser does not support audio.
-
             </audio>
 
         `;
@@ -119,22 +291,27 @@ async function sendMessage() {
 
         // Scroll to bottom
 
-        chatBox.scrollTop = chatBox.scrollHeight;
+        chatBox.scrollTop =
+            chatBox.scrollHeight;
 
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(error);
 
-        alert("Unable to connect to the server.");
+        alert(
+            "Unable to connect to the server."
+        );
 
-    } finally {
+    }
+
+    finally {
 
         loading.style.display = "none";
 
-        sendButton.disabled = false;
-
-        input.focus();
+        micButton.disabled = false;
 
     }
 
@@ -145,27 +322,11 @@ async function sendMessage() {
 
 function escapeHtml(text) {
 
-    const div = document.createElement("div");
+    const div =
+        document.createElement("div");
 
     div.textContent = text;
 
     return div.innerHTML;
 
 }
-
-
-// Press Enter to send
-
-document
-    .getElementById("messageInput")
-    .addEventListener("keydown", function(event) {
-
-        if (event.key === "Enter" && !event.shiftKey) {
-
-            event.preventDefault();
-
-            sendMessage();
-
-        }
-
-    });
